@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% csrf_token %}
+        <script>
+            function getCSRFToken() {
+                return document.querySelector('[name=csrfmiddlewaretoken]').value;
+            }
+        </script>
+        
+        <meta charset="'UTF-8">
+        <meta name="viewport" content="'width=device-width, initial-scale = 1.0">
+        <title>Black-Scholes Option Pricing</title>
+    </head>
+
+    <body>
+        <h2>Starting Parameters</h2>
+
+        <form id="input-form">
+            <label>Stock Price: <input inputmode="decimal" id="stock_price" required></label>
+            <label>Strike Price: <input inputmode="decimal" id="strike_price" required></label>
+            <label>Time to Maturity: <input inputmode="decimal" id="time_to_maturity" required></label>
+            <label>Risk-Free Rate: <input inputmode="decimal" id="risk_free_rate" required></label>
+            <label>Volatility (%)<input inputmode="decimal" id="volatility" required></label>
+            <button type="submit">Calculate</button>
+        </form>
+
+        <h3>Results</h3>
+
+        <p>
+            Call Option Price: <span id="call_price">-</span>
+            Put Option Price: <span id="put_price">-</span>
+        </p>
+        
+        <script>
+            document.getElementById("input-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const data = {
+                stock_price: parseFloat(document.getElementById("stock_price")),
+                strike_price: parseFloat(document.getElementById("strike_price")),
+                time_to_exp: parseFloat(document.getElementById("time_to_expiry")),
+                risk_free_rate: parseFloat(document.getElementById("risk_free_rate")),
+                volatilty: parseFloat(document.getElementById("volatilty"))
+            };
+
+            fetch('calculate/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken' : getCSRFToken()
+                },
+                body: JSON.stringify(data),
+            })
+
+            .then(response => response.json())
+            .then(result => {
+                document.getElementById('call_price').textContent = result.call_price;
+                document.getElementById('put_price').textContent = result.put_price;
+            })
+        });
+        </script>
+    </body>
+</html>
