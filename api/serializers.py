@@ -1,14 +1,12 @@
 from rest_framework import serializers
-from .models import OptionInputs, OptionOutputs
+from .models import OptionInput, OptionOutput
 
 class OptionInputSerializer(serializers.ModelSerializer):
-
     class Meta:
-        model = OptionInputs
+        model = OptionInput
         fields = '__all__'
 
 class OptionOutputSerializer(serializers.ModelSerializer):
-
     class Meta:
-        model = OptionOutputs
-        fields = ['volShock', 'stockPriceShock']
+        model = OptionOutput
+        fields = '__all__'
