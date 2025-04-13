@@ -21,9 +21,14 @@ const Heatmap = ({ data, title }) => {
 
   data.forEach((row, i) => {
     row.forEach((value, j) => {
-      formatted.push({ x: j, y: i, z: value });
+      formatted.push({ x: j, y: i, z : value });
     });
   });
+
+  const coloredData = formatted.map((entry) => ({
+    ...entry,
+    fill: getColor(entry.z),
+  }));
 
   return (
     <div className="bg-white p-4 rounded shadow">
@@ -35,10 +40,7 @@ const Heatmap = ({ data, title }) => {
           <YAxis type="number" dataKey="y" name="Spot Index" />
           <ZAxis type="number" dataKey="z" name="Option Price" range={[0, 255]} />
           <Tooltip cursor={{ strokeDasharray: "3 3" }} />
-          <Scatter data={formatted}>
-            {formatted.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={getColor(entry.z)} />
-            ))}
+          <Scatter data={coloredData} name="Heatmap Points" fill="#8884d8">
           </Scatter>
         </ScatterChart>
       </ResponsiveContainer>

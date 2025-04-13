@@ -26,7 +26,7 @@ const BlackScholesForm = ({setResult, setHeatmaps}) => {
     };
 
     const handleSubmit = async (e) => {
-        e.preventdefault();
+        e.preventDefault();
 
         try {
             const [priceResult, heatmapResult] = await Promise.all([
