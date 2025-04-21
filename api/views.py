@@ -37,32 +37,15 @@ class OptionHeatmapView(views.APIView):
             spot_values = np.linspace(data['spot_range_min'], data['spot_range_max'], 10)
             vol_values = np.linspace(data['vol_range_min'], data['vol_range_max'], 10)
             
-            call_prices = np.zeros((10, 10))
-            put_prices = np.zeros((10, 10))
+            call_prices = []
+            put_prices = []
             
-            for i, S in enumerate(spot_values):
-                for j, sigma in enumerate(vol_values):
-                    call_prices[i, j], put_prices[i, j] = black_scholes(S, data['strike_price'], data['time_to_maturity'], data['interest_rate'], sigma)
+            for S in spot_values:
+                for sigma in vol_values:
+                    call, put = black_scholes(S, data['strike_price'], data['time_to_maturity'], data['interest_rate'], sigma)
+                    call_prices.append({'volatility':sigma, 'spot_price':S, 'price':call})
+                    put_prices.append({'volatility':sigma, 'spot_price':S, 'price':put})
+
         
-            return Response({"call_heatmap": call_prices.tolist(), "put_heatmap": put_prices.tolist()})
+            return Response({"call_heatmap": call_prices, "put_heatmap": put_prices})
         return Response(serializer.errors, status=400)
-'''  
-@api_view(['POST'])
-def get_pricing(request):
-    data = json.loads(request.body)
-
-    call_price, put_price = black_scholes(
-        float(data['stockPrice']),
-        float(data['strikePrice']),
-        float(data['timeToExpiry']),
-        float(data['interestRate']),
-        float(data['volatility']),
-    )
-
-    calculation = OptionOutputs.objects.create(
-        call_price = data['callPrice'],
-        put_price = data['putPrice']
-    )
-
-    return JsonResponse(calculation)
-'''

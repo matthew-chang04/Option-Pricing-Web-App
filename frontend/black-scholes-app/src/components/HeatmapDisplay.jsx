@@ -50,10 +50,10 @@ const Heatmap = ({ data, title }) => {
   };
 
   return (
-    <div className="bg-white p-4 rounded shadow">
+    <div className="bg-blue-700 p-4 rounded shadow">
       <h3 className="text-lg font-semibold mb-4 text-center">{title}</h3>
       <div id="heatmap">
-        <ScatterChart width={500} height={500}>
+        <ScatterChart width={300} height={300}>
           <XAxis type="number" dataKey="x" name="Volatility Index" />
           <YAxis type="number" dataKey="y" name="Current Price" />
           <ZAxis type="number" dataKey="z" name="Option Price" />
