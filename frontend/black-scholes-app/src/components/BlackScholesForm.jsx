@@ -51,7 +51,7 @@ const BlackScholesForm = ({setResult, setHeatmaps}) => {
               <input
                 type="number"
                 step="any"
-                name={key}
+                id={key}
                 value={formData[key]}
                 onChange={handleChange}
                 className="border border-gray-300 p-2 rounded"
@@ -59,10 +59,7 @@ const BlackScholesForm = ({setResult, setHeatmaps}) => {
             </div>
           ))}
           <div className="col-span-2">
-            <button
-              type="submit"
-              className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
-            >
+            <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
               Calculate Prices & Heatmap
             </button>
           </div>
