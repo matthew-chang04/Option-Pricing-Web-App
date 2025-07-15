@@ -28,8 +28,8 @@ const App = () => {
 
         {heatmaps && (
           <div className="grid md:grid-cols-2 gap-30">
-            <Heatmap data={heatmaps.call_heatmap} start_price={result.call_price.toFixed(2)} title="Call Price Details" />
-            <Heatmap data={heatmaps.put_heatmap} start_price={result.put_price.toFixed(2)} title="Put Price Details" />
+            <Heatmap data={heatmaps.call_heatmap} />
+            <Heatmap data={heatmaps.put_heatmap} />
           </div>
         )}
       </main>

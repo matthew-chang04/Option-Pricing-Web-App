@@ -11,10 +11,8 @@ const BlackScholesForm = ({setResult, setHeatmaps}) => {
         time_to_maturity: 14,
         interest_rate: 0.06,
         volatility: 0.2,
-        spot_range_min: 15,
-        spot_range_max: 25,
-        vol_range_min: 0.1,
-        vol_range_max: 0.3,
+        price_shock: 5,
+        volatility_shock: 0.5,
     });
 
     function formatLabel(key) {

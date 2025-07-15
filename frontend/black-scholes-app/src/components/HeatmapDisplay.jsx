@@ -1,71 +1,45 @@
+// THIS FILE DOES NOT DO ANYTHING NOT CALLED ANYWHERE IS NOT NEEDED AT ALL PLEASE DELETE WHEN DONE
+
+
 import React from "react";
-import {
-  ScatterChart,
-  XAxis,
-  YAxis,
-  ZAxis,
-  CartesianGrid,
-  Tooltip,
-  Scatter,
-  ResponsiveContainer,
-  Rectangle,
-} from "recharts";
+import { ResponsiveHeatMap } from '@nivo/heatmap'
 
-const getColor = (value) => {
-    if (value < 50) return "#FF5733"; //Red
-    if (value < 10) return '#FFA500'; //Orange
-    if (value < 150) return "#FFBD33"; //Yellow
-
-    return "#33FF57"; //Green
-  };
-
-const Heatmap = ({ data, title }) => {
-  const formatted = [];
-
-  data.forEach((row, i) => {
-    row.forEach((value, j) => {
-      formatted.push({ x: j, y: i, z : value });
-    });
-  });
-
-  const coloredData = formatted.map((entry) => ({
-    ...entry,
-    fill: getColor(entry.z),
-  }));
-
-  const blockShape = (props) => {
-
-    const {cx, cy, z} = props;
-
-    return(
-      <rect
-      x={cx - 5} 
-      y={cy - 5}
-      width={10}
-      height={10}
-      fill={getColor(z)}
-      opacity={z / 100}
-    />
-    );
-  };
-
-  return (
-    <div className="bg-blue-700 p-4 rounded shadow">
-      <h3 className="text-lg font-semibold mb-4 text-center">{title}</h3>
-      <div id="heatmap">
-        <ScatterChart width={300} height={300}>
-          <XAxis type="number" dataKey="x" name="Volatility Index" />
-          <YAxis type="number" dataKey="y" name="Current Price" />
-          <ZAxis type="number" dataKey="z" name="Option Price" />
-          <Tooltip cursor={{ strokeDasharray: "3 3" }} />
-          <Scatter data={coloredData} name="Heatmap Points" fill="#8884d8" shape={blockShape}>
-          </Scatter>
-        </ScatterChart>
-      </div>
-    </div>
-  );
-};
-
+const Heatmap = ({ data }) => (
+  <ResponsiveHeatMap
+      data={data}
+      margin={{ top :60, right: 90, bottom: 60, left: 90 }}
+      valueFormat=">-.2s"
+      axisTop={{ tickRotation: -90 }}
+      axisLeft={{legend: "Current Price", legendOffset: -60}}
+      axisRight={{legend: "Current Price", legendOffset: 60}}
+      colors={{
+        type: 'diverging',
+        scheme: 'red_yellow_blue',
+        divergeAt: 0.5,
+        minValue: -100000,
+        maxValue: 100000
+      }}
+      emptyColor="#555555"
+      legends={[
+        {
+          anchor: 'bottom',
+          translateX: 0,
+          translateY: 30,
+          length: 400,
+          thickness: 8,
+          direction: 'row',
+          tickPosition: 'after',
+          tickSize: 3,
+          tickSpacing: 4,
+          tickOverlap: false,
+          tickFormat: '>-.2s',
+          title: 'Value →',
+          titleAlign: 'start',
+         titleOffset: 4
+        }
+      ]}
+      />
+)
 const HeatmapDisplay = ({ heatmaps }) => {
   return (
     <div className="grid md:grid-cols-2 gap-6">

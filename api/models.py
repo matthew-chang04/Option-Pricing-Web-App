@@ -7,10 +7,8 @@ class OptionInput(models.Model):
     interest_rate = models.FloatField()
     volatility = models.FloatField()
     time_to_maturity = models.FloatField()
-    spot_range_min = models.FloatField()
-    spot_range_max = models.FloatField()
-    vol_range_min = models.FloatField()
-    vol_range_max = models.FloatField()
+    price_shock = models.FloatField(null=True)
+    volatility_shock = models.FloatField(null=True)
 
 class OptionOutput(models.Model):
     option_input = models.OneToOneField(OptionInput, on_delete=models.CASCADE)
