@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from rest_framework import views
+from rest_framework.views import APIView
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.permissions import AllowAny
@@ -10,21 +12,47 @@ import numpy as np
 
 # Create your views here.
 
-class OptionPriceView(views.APIView):
-
-    permission_classes = [AllowAny]
-
+class OptionPriceView(APIView):
     def post(self, request):
         serializer = OptionInputSerializer(data=request.data)
-        if serializer.is_valid():
-            data = serializer.validated_data
-            call_price, put_price = black_scholes(data['spot_price'], data['strike_price'], data['time_to_maturity'], data['interest_rate'], data['volatility'])
+        serializer.is_valid(raise_exception=True)
 
-            option_input = serializer.save()
-            OptionOutput.objects.create(option_input=option_input, call_price=call_price, put_price=put_price)
-            
-            return Response({"call_price": call_price, "put_price": put_price})
-        return Response(serializer.errors, status=400)
+        # Ensure OptionInput exists
+        option_input, created = OptionInput.objects.get_or_create(**serializer.validated_data)
+
+        # Check for existing OptionOutput
+        option_output = OptionOutput.objects.filter(option_input=option_input).first()
+        if option_output:
+            return Response(
+                {
+                    "call_price": option_output.call_price,
+                    "put_price": option_output.put_price,
+                },
+                status=status.HTTP_200_OK,
+            )
+
+        # Otherwise calculate and store
+        call_price, put_price = black_scholes(
+            option_input.spot_price,
+            option_input.strike_price,
+            option_input.time_to_maturity,
+            option_input.interest_rate,
+            option_input.volatility,
+        )
+        option_output = OptionOutput.objects.create(
+            option_input=option_input,
+            call_price=call_price,
+            put_price=put_price,
+        )
+
+        return Response(
+            {
+                "call_price": option_output.call_price,
+                "put_price": option_output.put_price,
+            },
+            status=status.HTTP_201_CREATED,
+        )
+    
 
 class OptionHeatmapView(views.APIView):
 

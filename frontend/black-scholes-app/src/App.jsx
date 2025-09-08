@@ -27,7 +27,7 @@ const App = () => {
         )}
 
         {heatmaps && (
-          <div className="grid md:grid-cols-2 gap-30">
+          <div className="grid md:grid-cols-2 gap-12">
             <Heatmap data={heatmaps.call_heatmap} />
             <Heatmap data={heatmaps.put_heatmap} />
           </div>

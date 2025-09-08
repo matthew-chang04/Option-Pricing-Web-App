@@ -10,6 +10,9 @@ class OptionInput(models.Model):
     price_shock = models.FloatField(null=True)
     volatility_shock = models.FloatField(null=True)
 
+    class Meta:
+        unique_together = ('spot_price', 'strike_price', 'interest_rate', 'volatility', 'time_to_maturity')
+
 class OptionOutput(models.Model):
     option_input = models.OneToOneField(OptionInput, on_delete=models.CASCADE)
     call_price = models.FloatField()

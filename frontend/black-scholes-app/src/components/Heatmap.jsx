@@ -24,7 +24,7 @@ const Heatmap = ( {data} ) => {
                   anchor: 'bottom',
                   translateX: 0,
                   translateY: 30,
-                  length: 400,
+                  length: 200,
                   thickness: 8,
                   direction: 'row',
                   tickPosition: 'after',
